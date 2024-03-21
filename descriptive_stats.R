@@ -1,9 +1,8 @@
 library(dplyr)
 library(gt)
-provider_data_time_varying$event_char <- as.character(provider_data_time_varying$event)
-#child_care_data_final
-#Percent_Black,Percent_White, Percent_Asian, Percent_Drive, Percent_Public_Transportation, Percent_Bachelors_Or_Higher, Percent_Less_Than_12_Year
-desc_stats <- subset(provider_data_time_varying, select = c("number_of_stops","type_of_care", "event_char",
+provider_data_time_varying_minneapolis$event_char <- as.character(provider_data_time_varying_minneapolis$event)
+
+desc_stats <- subset(provider_data_time_varying_minneapolis, select = c("number_of_stops_walking","type_of_care", "event_char",
                                                                 'Percent_Black','Percent_White', 'Percent_Asian', 
                                                                 'Percent_Drive', 'Percent_Public_Transportation', 
                                                                 'Percent_Bachelors_Or_Higher', 'Percent_Less_Than_12_Year'))
