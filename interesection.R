@@ -1,3 +1,4 @@
+
 combined_data <- st_as_sf(combined_data)
 combined_data <- st_transform(combined_data, crs=4326)
 
@@ -20,9 +21,9 @@ intersect_date <- function(dates) {
   # 
   print("intersection")
   # Step 2: Perform the spatial join
-  joined_data <- st_intersection(combined_data_subset, block_minneapolis)
+  joined_data <- st_intersection(block_minneapolis,combined_data_subset)
   
-  # Step 3: Ensure 'date' is in the correct format (if not already)
+  # Step 3: Ensure 'date' is in the correct format
   joined_data <- mutate(joined_data, date = as.character(dates))
   
 }
@@ -67,8 +68,11 @@ for (i in seq_along(intersection_results_flattened)) {
   intersection_results_flattened[[i]]$date_processed <- dates_of_interest[i]
 }
 combined_data_Minneapolis <- do.call(rbind, intersection_results_flattened)
-rm(intersection_results_flattened,intersection_results_list)
+#rm(intersection_results_flattened,intersection_results_list)
 names(combined_data_minneapolis)
+
+
+
 
 # combined_data_metro_non_white <- subset(combined_data_Minneapolis, select = c("date","provider_uid","number_of_stops",
 #                                                                           "date_processed", "Block_Group_Code","Percent_Black","Percent_White","Percent_Asian",               
