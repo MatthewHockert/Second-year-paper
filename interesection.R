@@ -1,8 +1,11 @@
+# This is to speed up the intersection of childcare centers and census level
+# take childcare data from second_year_paper.R and plug in with the chosen census level
+#child_care_centers_msp2_tract <- st_intersection(child_care_centers_msp2,census_tract)
 
-combined_data <- st_as_sf(combined_data)
-combined_data <- st_transform(combined_data, crs=4326)
+# combined_data <- st_as_sf(combined_data)
+# combined_data <- st_transform(combined_data, crs=4326)
 
-combined_data$date <- as.character(combined_data$date)
+child_care_centers_msp2$date <- as.character(child_care_centers_msp2$date)
 
 dates_of_interest <- as.character(c("2019-10-01", "2019-07-01", "2019-04-01", "2019-01-01", 
                                     "2018-10-01", "2018-07-01", "2018-04-01", "2017-10-01", 
@@ -12,7 +15,7 @@ dates_of_interest <- as.character(c("2019-10-01", "2019-07-01", "2019-04-01", "2
 start_time <- Sys.time()
 intersect_date <- function(dates) {
   # Step 1: Filter both datasets for the specified date
-  combined_data_subset <- combined_data %>% #from above. Original data comes from main script
+  combined_data_subset <- child_care_centers_msp2 %>% #from above. Original data comes from main script
     subset(date %in% dates)
   
   # filtered_combined_stops <- combined_stops %>% #comes from transit_file_generator.R
@@ -21,7 +24,7 @@ intersect_date <- function(dates) {
   # 
   print("intersection")
   # Step 2: Perform the spatial join
-  joined_data <- st_intersection(block_minneapolis,combined_data_subset)
+  joined_data <- st_intersection(combined_data_subset,census_tract)
   
   # Step 3: Ensure 'date' is in the correct format
   joined_data <- mutate(joined_data, date = as.character(dates))
@@ -34,7 +37,7 @@ dates_chunks <- split(dates_of_interest, cut(seq_along(dates_of_interest), n_cor
 
 # Prepare the cluster
 cl <- makeCluster(n_cores)
-clusterExport(cl, varlist = c("intersect_date", "combined_data", "block_minneapolis", "dates_of_interest"))
+clusterExport(cl, varlist = c("intersect_date", "child_care_centers_msp2", "census_tract", "dates_of_interest"))
 clusterEvalQ(cl, {
   library(sf)
   library(dplyr)
@@ -67,9 +70,9 @@ intersection_results_flattened <- unlist(intersection_results_list, recursive = 
 for (i in seq_along(intersection_results_flattened)) {
   intersection_results_flattened[[i]]$date_processed <- dates_of_interest[i]
 }
-combined_data_Minneapolis <- do.call(rbind, intersection_results_flattened)
+combined_data <- do.call(rbind, intersection_results_flattened)
 #rm(intersection_results_flattened,intersection_results_list)
-names(combined_data_minneapolis)
+names(combined_data)
 
 
 

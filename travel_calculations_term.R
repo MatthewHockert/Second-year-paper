@@ -9,7 +9,7 @@ library(r5r)
 library(dplyr)
 library(sp)
 options(java.parameters = "-Xmx8g")
-r5_core <- setup_r5(data_path = "../second year paper/osm/", verbose = TRUE)
+r5_core <- setup_r5(data_path = "/Users/matthewhockert/Desktop/UMN/second year paper/osm/", verbose = TRUE)
 
 dates_of_interest <- as.character(c("2019-10-01", "2019-07-01", "2019-04-01", "2019-01-01", 
                                     "2018-10-01", "2018-07-01", "2018-04-01", "2017-10-01", 
@@ -18,13 +18,13 @@ dates_of_interest <- as.character(c("2019-10-01", "2019-07-01", "2019-04-01", "2
                                     "2014-03-01", "2013-12-01", "2013-09-01"))
 
 
-combined_stops_import <- sf::st_read("../second year paper/combined_stops.shp")
+combined_stops_import <- sf::st_read("/Users/matthewhockert/Desktop/UMN/second year paper/combined_stops.shp")
 names(combined_stops_import)[names(combined_stops_import) == "stop_id"] <- "id"
 combined_stops_import <- st_transform(combined_stops_import,4326)
 combined_stops_import$dates <- as.character(combined_stops_import$date)
 combined_stops_import$opportunities <- 1
 
-child_care_centers_mp2_select_import <- st_read("../second year paper/child_care_centers_mp2_select.shp")
+child_care_centers_mp2_select_import <- st_read("/Users/matthewhockert/Desktop/UMN/second year paper/child_care_centers_mp2_select.shp")
 names(child_care_centers_mp2_select_import)[names(child_care_centers_mp2_select_import) == "prvdr_d"] <- "id"
 child_care_centers_mp2_select_import$dates <- as.character(child_care_centers_mp2_select_import$date)
 child_care_centers_mp2_select_import <- st_transform(child_care_centers_mp2_select_import,4326)
@@ -83,7 +83,8 @@ names(all_results_df)[names(all_results_df) == "id"] <- "provider_uid"
 # all_results_df <- as.data.frame(all_results)
 
 #read out and write in Rstudio because terminal does not excute and save the data in the global enviroment
-write.csv(all_results_df, "..second year paper/all_results_df.csv", row.names = FALSE)
-all_results_df <- read.csv("../second year paper/all_results_df.csv")
+print("writing to CSV")
+write.csv(all_results_df, "/Users/matthewhockert/Desktop/UMN/second year paper/all_results_df.csv", row.names = FALSE)
+all_results_df <- read.csv("/Users/matthewhockert/Desktop/UMN/second year paper/all_results_df.csv")
 
 
